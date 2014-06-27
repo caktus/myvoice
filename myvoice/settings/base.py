@@ -160,6 +160,8 @@ INSTALLED_APPS = (
     "myvoice.core",
     "myvoice.clinics",
     "myvoice.pbf",
+    "myvoice.statistics",
+    "myvoice.survey",
 
     "rapidsms.contrib.default",  # Must be last
 )
@@ -243,11 +245,15 @@ djcelery.setup_loader()
 
 CELERYBEAT_SCHEDULE = {
     'sample-task': {
-        'task': 'myvoice.clinics.tasks.sample_task',
+        'task': 'myvoice.survey.tasks.import_responses',
         'schedule': crontab(hour='*/1', minute='0'),
     },
 }
 
 # Set PostGIS version so that Django can find it.
-# See http://stackoverflow.com/questions/10584852/my-postgis-database-looks-fine-but-geodjango-thinks-otherwise-why
+# See http://stackoverflow.com/questions/10584852/my-postgis-database-looks-fine-but-geodjango-thinks-otherwise-why  # noqa
 POSTGIS_VERSION = (2, 1)
+
+TEXTIT_API_TOKEN = os.environ.get('TEXTIT_API_TOKEN', '')
+TEXTIT_USERNAME = os.environ.get('TEXTIT_USERNAME', '')
+TEXTIT_PASSWORD = os.environ.get('TEXTIT_PASSWORD', '')
