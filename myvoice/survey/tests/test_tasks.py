@@ -55,7 +55,7 @@ class TestStartFeedbackSurvey(TestCase):
         """When survey is sent, survey_sent field should be updated."""
         tasks.start_feedback_survey(self.visit.pk)
         self.assertEqual(start_flow.call_count, 1)
-        expected = ((self.survey.flow_id, self.visit.mobile),)
+        expected = ((self.survey.flow_id, [self.visit.mobile]),)
         self.assertEqual(start_flow.call_args, expected)
         self.visit = Visit.objects.get(pk=self.visit.pk)
         self.assertIsNotNone(self.visit.survey_sent)
@@ -65,7 +65,7 @@ class TestStartFeedbackSurvey(TestCase):
         start_flow.side_effect = TextItException
         tasks.start_feedback_survey(self.visit.pk)
         self.assertEqual(start_flow.call_count, 1)
-        expected = ((self.survey.flow_id, self.visit.mobile),)
+        expected = ((self.survey.flow_id, [self.visit.mobile]),)
         self.assertEqual(start_flow.call_args, expected)
         self.visit = Visit.objects.get(pk=self.visit.pk)
         self.assertIsNone(self.visit.survey_sent)
