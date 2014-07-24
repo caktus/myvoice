@@ -14,6 +14,7 @@ framework.
 
 """
 import os
+import oboeware.djangoware  # noqa
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "myvoice.settings")
 
