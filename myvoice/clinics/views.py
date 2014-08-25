@@ -209,8 +209,6 @@ class ClinicReport(ReportMixin, DetailView):
                 'data': week_data,
                 'patient_satisfaction': self._get_patient_satisfaction(week_responses),
                 'wait_time_mode': mode_wait_time,
-                #'wait_time_mode': survey_utils.get_mode(
-                #    wait_times, self.questions.get('Wait Time').get_categories()),
                 'survey_num': survey_num
             })
         return data
