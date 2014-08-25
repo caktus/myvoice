@@ -20,6 +20,12 @@ from . import models
 logger = logging.getLogger(__name__)
 
 
+def shorten_hour(value):
+    if not value:
+        return None
+    return value.replace('hour', 'hr')
+
+
 class VisitView(View):
 
     @csrf_exempt
@@ -117,7 +123,9 @@ class ReportMixin(object):
                 wait_times = [r.response for r in responses_by_question['Wait Time']]
                 mode = survey_utils.get_mode(
                     wait_times, self.questions.get('Wait Time').get_categories())
-                service_data.append((mode, len(wait_times)))
+                mode_display = shorten_hour(mode)
+                len_mode = len([r for r in wait_times if r == mode])
+                service_data.append((mode_display, len_mode))
             else:
                 service_data.append((None, 0))
             data.append((service, service_data))
@@ -193,13 +201,16 @@ class ClinicReport(ReportMixin, DetailView):
                 else:
                     week_data.append((None, 0))
             wait_times = [r.response for r in responses_by_question.get('Wait Time', [])]
+            mode_wait_time = shorten_hour(survey_utils.get_mode(
+                wait_times, self.questions.get('Wait Time').get_categories()))
             data.append({
                 'week_start': week_start,
                 'week_end': get_week_end(week_start),
                 'data': week_data,
                 'patient_satisfaction': self._get_patient_satisfaction(week_responses),
-                'wait_time_mode': survey_utils.get_mode(
-                    wait_times, self.questions.get('Wait Time').get_categories()),
+                'wait_time_mode': mode_wait_time,
+                #'wait_time_mode': survey_utils.get_mode(
+                #    wait_times, self.questions.get('Wait Time').get_categories()),
                 'survey_num': survey_num
             })
         return data
@@ -418,7 +429,9 @@ class RegionReport(ReportMixin, DetailView):
                 wait_times = [r['response'] for r in responses_by_question['Wait Time']]
                 mode = survey_utils.get_mode(
                     wait_times, self.questions.get('Wait Time').get_categories())
-                clinic_data.append((mode, len(wait_times)))
+                mode_display = shorten_hour(mode)
+                len_mode = len([r for r in wait_times if r == mode])
+                clinic_data.append((mode_display, len_mode))
             else:
                 clinic_data.append((None, 0))
             data.append((clinic_map[clinic], clinic_data))
