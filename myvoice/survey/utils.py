@@ -27,11 +27,12 @@ def analyze(answers, correct_answer):
 
 def get_mode(answers, acceptable_answers=None):
     """Returns the most commonly-reported answer, or None if there are no responses."""
+    # import pdb;pdb.set_trace()
     if acceptable_answers is not None:
         answers = [a for a in answers if a in acceptable_answers]
     if answers:
         mode = max(Counter(answers).iteritems(), key=itemgetter(1))[0]
-        return mode.replace('hour', 'hr')
+        return mode
     return None
 
 
