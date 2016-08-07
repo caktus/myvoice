@@ -101,6 +101,8 @@ class TextItApi(object):
 
         phones should be a list of international-format phone numbers.
         """
+        if not isinstance(phones, list) or not isinstance(phones, tuple):
+            phones = [phones]
         data = {'flow': flow_id, 'phone': phones}
         run_data = self.client.post('runs', data=data)
         return run_data
@@ -110,6 +112,8 @@ class TextItApi(object):
 
         phones should be a list of international-format phone numbers.
         """
+        if not isinstance(phones, list) or not isinstance(phones, tuple):
+            phones = [phones]
         data = {'text': message, 'phone': phones}
         sms_data = self.client.post('sms', data=data)
         return sms_data
